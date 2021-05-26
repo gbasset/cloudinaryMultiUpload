@@ -3,12 +3,10 @@ import { Image, Transformation } from 'cloudinary-react';
 
 export default function Home() {
     const [imageIds, setImageIds] = useState();
+
     const loadImages = async () => {
         try {
-            const res = await fetch('/api/images');
-            const res2 = await fetch('/api/presets');
-            const data2 = await res2.json();
-            console.log("data2", data2);
+            const res = await fetch('/api/images/gaetan/test')
             const data = await res.json();
             setImageIds(data);
         } catch (err) {
@@ -18,8 +16,7 @@ export default function Home() {
     useEffect(() => {
         loadImages();
     }, []);
-    console.log("imageIds", imageIds);
-    console.log("process.env.REACT_APP_CLOUDINARY_NAME", process.env.REACT_APP_CLOUDINARY_NAME);
+
     return (
         <div>
             <h1 className="title">Cloudinary Gallery</h1>

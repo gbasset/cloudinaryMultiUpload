@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert';
 
 export default function Upload() {
@@ -7,7 +7,21 @@ export default function Upload() {
     const [selectedFile, setSelectedFile] = useState();
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
+    const [idClient, setidClient] = useState("gaetan");
+    const [idOfLibrary, setidOfLibrary] = useState();
 
+    const getPresets = async () => {
+        try {
+            const res2 = await fetch('/api/presets/gaetan');
+            const data2 = await res2.json();
+            console.log("data2", data2);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    useEffect(() => {
+        getPresets();
+    }, []);
     const handleFileInputChange = async (e) => {
         const files = e.target.files;
         let imgs = []
@@ -52,7 +66,11 @@ export default function Upload() {
         try {
             await fetch('/api/upload', {
                 method: 'POST',
-                body: JSON.stringify({ clientId: 'gaetan', data: base64EncodedImage }),
+                body: JSON.stringify({
+                    clientId: 'gaetan', data: base64EncodedImage, folderId: "test",
+                    eager: [{ width: 400, height: 300, crop: "pad" },
+                    { width: 260, height: 200, crop: "crop", gravity: "north" }]
+                }),
                 headers: { 'Content-Type': 'application/json' },
             });
             setFileInputState('');
